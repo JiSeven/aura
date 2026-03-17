@@ -37,7 +37,7 @@ jobs:
 
       - name: Create Release Pull Request or Publish
         id: changesets
-        uses: changeset/action@v1
+        uses: changesets/action@v1
         with:
           version: pnpm changeset version
           publish: pnpm changeset tag
