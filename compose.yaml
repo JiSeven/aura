@@ -1,12 +1,81 @@
+version: '3.8'
+
+networks:
+  aura_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redpanda_data:
+
 services:
+  # --- DATABASE ---
   postgres:
     image: postgres:16-alpine
+    container_name: aura-postgres
+    networks:
+      - aura_network
     ports:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: aura
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # --- CACHE ---
   redis:
-      image: redis:7-alpine
-      ports:
-        - "6379:6379"
+    image: redis:7-alpine
+    container_name: aura-redis
+    networks:
+      - aura_network
+    ports:
+      - "6379:6379"
+
+  # --- MESSAGE BROKER (REDPANDA) ---
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v25.3.10
+    container_name: aura-redpanda
+    networks:
+      - aura_network
+    command:
+      - redpanda start
+      - --overprovisioned
+      - --smp 1
+      - --memory 1G
+      - --reserve-memory 0M
+      - --node-id 0
+      - --check=false
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
+      - --mode dev-container
+    ports:
+      - "19092:19092"
+      - "18081:18081"
+    volumes:
+      - redpanda_data:/var/lib/redpanda/data
+
+  # --- KAFKA UI ---
+  redpanda-console:
+    image: docker.redpanda.com/redpandadata/console:v3.6.0
+    container_name: aura-redpanda-console
+    entrypoint: /bin/sh
+    command: -c 'echo "$$CONSOLE_CONFIG_FILE" > /tmp/config.yml; /app/console'
+    networks:
+      - aura_network
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["redpanda:9092"]
+        schemaRegistry:
+          enabled: true
+          urls: ["http://redpanda:8081"]
+        redpanda:
+          adminApi:
+            enabled: true
+            urls: ["http://redpanda:9644"]
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redpanda

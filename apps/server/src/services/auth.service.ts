@@ -1,11 +1,13 @@
 import { type AuraDb, accounts, eq } from "@aura/db";
 import argon2 from "argon2";
 import type Redis from "ioredis";
+import type { Producer } from "kafkajs";
 
 export class AuthService {
 	constructor(
 		private readonly db: AuraDb,
 		private readonly redis: Redis,
+		private readonly queue: Producer,
 	) {}
 
 	async register(email: string, password: string) {
@@ -30,6 +32,19 @@ export class AuthService {
 		if (!newAccount) {
 			throw new Error("Error registering account");
 		}
+
+		await this.queue.send({
+			topic: "account.registered",
+			messages: [
+				{
+					value: JSON.stringify({
+						id: newAccount.id,
+						email: newAccount.email,
+						action: "send_otp",
+					}),
+				},
+			],
+		});
 
 		return newAccount;
 	}
