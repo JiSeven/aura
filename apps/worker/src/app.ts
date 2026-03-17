@@ -17,6 +17,11 @@ export const buildApp = async () => {
 	});
 
 	await app.register(fastifyAutoload, {
+		dir: path.join(__dirname, "services"),
+		routeParams: true,
+	});
+
+	await app.register(fastifyAutoload, {
 		dir: path.join(__dirname, "consumers"),
 		routeParams: true,
 	});

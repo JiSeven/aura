@@ -14,8 +14,15 @@ export default fp(async (fastify) => {
 	consumer
 		.run({
 			eachMessage: async ({ message }) => {
-				const payload = JSON.parse(message.value?.toString() || "{}");
-				fastify.log.info({ payload }, "📧 Sending OTP email to user");
+				const { email, id } = JSON.parse(message.value?.toString() || "{}");
+
+				const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+				await fastify.redis.set(`otp:${email}`, otpCode, "EX", 300);
+
+				await fastify.email.sendOTP(email, otpCode);
+
+				fastify.log.info({ email }, "✅ OTP отправлен успешно");
 			},
 		})
 		.catch((err) => {
