@@ -1,0 +1,12 @@
+{
+  "name": "@aura/db",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "check-types": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
