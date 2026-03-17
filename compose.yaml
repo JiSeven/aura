@@ -5,6 +5,7 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: password
+      POSTGRES_DB: aura
   redis:
       image: redis:7-alpine
       ports:

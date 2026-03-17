@@ -4,7 +4,8 @@
 	"description": "",
 	"main": "src/index.ts",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"generate": "drizzle-kit generate",
+		"migrate": "drizzle-kit migrate"
 	},
 	"keywords": [],
 	"author": "",
@@ -16,6 +17,8 @@
 		"typescript": "5.9.2"
 	},
 	"dependencies": {
+		"@aura/typescript-config": "workspace:^",
+		"dotenv": "^17.3.1",
 		"drizzle-orm": "^0.45.1",
 		"postgres": "^3.4.8",
 		"uuidv7": "^1.1.0"

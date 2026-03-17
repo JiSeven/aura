@@ -27,6 +27,10 @@ export class AuthService {
 			})
 			.returning();
 
+		if (!newAccount) {
+			throw new Error("Error registering account");
+		}
+
 		return newAccount;
 	}
 

@@ -5,8 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "tsx watch src/index.ts",
-		"build": "tsup src/index.ts",
-		"check-types": "tsc --noEmit"
+		"build": "tsup src/index.ts"
 	},
 	"keywords": [],
 	"author": "",
