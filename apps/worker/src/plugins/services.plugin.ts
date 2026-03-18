@@ -1,5 +1,5 @@
 import fp from "fastify-plugin";
-import { env } from "../config/env";
+import { env } from "../config/env.config";
 import { EmailService } from "../services/email.service";
 
 export default fp(async (fastify) => {

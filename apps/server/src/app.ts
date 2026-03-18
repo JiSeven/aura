@@ -7,7 +7,7 @@ import {
 	type ZodTypeProvider,
 } from "fastify-type-provider-zod";
 import path from "node:path";
-import { AppError } from "./utils/errors";
+import { AppError } from "./utils/errors.util";
 
 export const buildApp = async () => {
 	const app = fastify({
@@ -55,11 +55,6 @@ export const buildApp = async () => {
 
 	await app.register(fastifyAutoload, {
 		dir: path.join(__dirname, "routes"),
-		routeParams: true,
-	});
-
-	await app.register(fastifyAutoload, {
-		dir: path.join(__dirname, "services"),
 		routeParams: true,
 	});
 

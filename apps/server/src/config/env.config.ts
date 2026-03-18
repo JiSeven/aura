@@ -1,15 +1,15 @@
 import { createEnv } from "@t3-oss/env-core";
-import "dotenv/config";
+import { config } from "dotenv";
+import path from "node:path";
 import { z } from "zod";
+
+config({ path: path.resolve(__dirname, "../../../../.env") });
 
 export const env = createEnv({
 	server: {
-		NODE_ENV: z
-			.enum(["development", "production", "test"])
-			.default("development"),
-		PORT: z.string().transform(Number).default(3001),
+		SERVER_PORT: z.string().transform(Number),
 		DATABASE_URL: z.url(),
-		REDIS_URL: z.url().default("redis://localhost:6379"),
+		REDIS_URL: z.url(),
 		KAFKA_BROKERS: z.string().min(1),
 	},
 	runtimeEnv: process.env,

@@ -1,0 +1,20 @@
+{
+	"name": "@aura/infra",
+	"version": "0.1.0",
+	"description": "",
+	"type": "module",
+	"main": "src/index.js",
+	"dependencies": {
+		"@aura/typescript-config": "workspace:^",
+		"argon2": "^0.44.0",
+		"fastify": "^5.8.2",
+		"fastify-plugin": "latest",
+		"ioredis": "^5.10.0",
+		"kafkajs": "latest",
+		"resend": "^6.9.4"
+	},
+	"devDependencies": {
+		"tsx": "^4.21.0",
+		"typescript": "5.9.2"
+	}
+}

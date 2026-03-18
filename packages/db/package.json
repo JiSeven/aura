@@ -6,7 +6,8 @@
 	"scripts": {
 		"generate": "drizzle-kit generate",
 		"migrate": "drizzle-kit migrate",
-		"push": "drizzle-kit push"
+		"push": "drizzle-kit push",
+		"studio": "drizzle-kit studio"
 	},
 	"keywords": [],
 	"author": "",
@@ -19,9 +20,11 @@
 	},
 	"dependencies": {
 		"@aura/typescript-config": "workspace:^",
+		"@t3-oss/env-core": "^0.13.10",
 		"dotenv": "^17.3.1",
 		"drizzle-orm": "^0.45.1",
 		"postgres": "^3.4.8",
-		"uuidv7": "^1.1.0"
+		"uuidv7": "^1.1.0",
+		"zod": "^4.3.6"
 	}
 }
