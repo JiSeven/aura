@@ -1,9 +1,13 @@
-import { AccountRegisteredPayloadSchema, AUTH_TOPICS } from "@aura/contracts";
+import {
+	AccountRegisteredPayloadSchema,
+	AUTH_GROUPS,
+	AUTH_TOPICS,
+} from "@aura/contracts";
 import fp from "fastify-plugin";
 
 export default fp(async (fastify) => {
 	await fastify.events.subscribe(
-		"aura-worker-group",
+		AUTH_GROUPS.EMAIL_WORKER,
 		AUTH_TOPICS.ACCOUNT_REGISTERED,
 		async (rawPayload) => {
 			try {

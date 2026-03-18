@@ -1,4 +1,8 @@
-import { AUTH_TOPICS } from "@aura/contracts";
+import {
+	AUTH_TOPICS,
+	ConflictError,
+	InternalServerError,
+} from "@aura/contracts";
 import { type AuraDb, accounts, eq } from "@aura/db";
 import type { EventBus, SecurityService } from "@aura/infra";
 
@@ -15,7 +19,7 @@ export class AuthService {
 		});
 
 		if (existingAccount) {
-			throw new Error("Account already exists");
+			throw new ConflictError("Account already exists");
 		}
 
 		const passwordHash = await this.security.hash(password);
@@ -29,7 +33,7 @@ export class AuthService {
 			.returning();
 
 		if (!account) {
-			throw new Error("Error registering account");
+			throw new InternalServerError("Error registering account");
 		}
 
 		await this.events.publish(AUTH_TOPICS.ACCOUNT_REGISTERED, {

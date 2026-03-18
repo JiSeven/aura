@@ -5,6 +5,10 @@ export const AUTH_TOPICS = {
 	ACCOUNT_VERIFIED: "auth.account.verified",
 } as const;
 
+export const AUTH_GROUPS = {
+	EMAIL_WORKER: "auth.email-worker.group",
+} as const;
+
 export const AccountRegisteredPayloadSchema = z.object({
 	id: z.uuid(),
 	email: z.email(),
