@@ -16,6 +16,7 @@
 		"@aura/infra": "workspace:^",
 		"@aura/typescript-config": "workspace:^",
 		"@fastify/autoload": "^6.3.1",
+		"@fastify/cookie": "^11.0.2",
 		"@fastify/cors": "^11.2.0",
 		"@t3-oss/env-core": "^0.13.10",
 		"dotenv": "^17.3.1",

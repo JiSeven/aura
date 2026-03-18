@@ -8,7 +8,12 @@ export default fp(async (fastify) => {
 
 	const securityService = new SecurityService();
 
-	const authService = new AuthService(fastify.db, securityService, events);
+	const authService = new AuthService(
+		fastify.db,
+		securityService,
+		events,
+		fastify.redis,
+	);
 
 	fastify.decorate("auth", authService);
 

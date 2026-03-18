@@ -18,8 +18,8 @@ export const redisPlugin = fp<RedisPluginOptions>(async (fastify, options) => {
 
 	fastify.decorate("redis", redis);
 
-	fastify.addHook("onClose", async () => {
-		fastify.log.info("🔌 Закрытие Redis соединения...");
+	fastify.addHook("onClose", async (instance) => {
+		instance.log.info("🔌 Closing Redis connections...");
 		await redis.quit();
 	});
 });

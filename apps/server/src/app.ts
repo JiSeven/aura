@@ -1,4 +1,7 @@
+import { UnauthorizedError } from "@aura/contracts";
+import { AppError } from "@aura/contracts/src/errors/base.error";
 import fastifyAutoload from "@fastify/autoload";
+import cookie from "@fastify/cookie";
 import fastify from "fastify";
 import {
 	hasZodFastifySchemaValidationErrors,
@@ -7,7 +10,6 @@ import {
 	type ZodTypeProvider,
 } from "fastify-type-provider-zod";
 import path from "node:path";
-import { AppError } from "./utils/errors.util";
 
 export const buildApp = async () => {
 	const app = fastify({
@@ -48,6 +50,10 @@ export const buildApp = async () => {
 		});
 	});
 
+	await app.register(cookie, {
+		secret: "my-secret-key",
+	});
+
 	await app.register(fastifyAutoload, {
 		dir: path.join(__dirname, "plugins"),
 		routeParams: true,
@@ -56,7 +62,29 @@ export const buildApp = async () => {
 	await app.register(fastifyAutoload, {
 		dir: path.join(__dirname, "routes"),
 		routeParams: true,
+		options: { prefix: "/api/v1" },
+	});
+
+	app.addHook("preHandler", async (request) => {
+		if (request.routeOptions.config.isPublic) return;
+
+		const { sessionId } = request.cookies;
+		if (!sessionId) throw new UnauthorizedError("Authentication required");
+
+		const account = await app.auth.getSessionAccount(sessionId);
+
+		request.account = { id: account.id, email: account.email };
 	});
 
 	return app;
 };
+
+declare module "fastify" {
+	interface FastifyContextConfig {
+		isPublic?: boolean;
+	}
+
+	interface FastifyRequest {
+		account: { id: string; email: string };
+	}
+}

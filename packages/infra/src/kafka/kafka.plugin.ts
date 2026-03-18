@@ -10,8 +10,8 @@ export const kafkaPlugin = fp<KafkaPluginOptions>(async (fastify, options) => {
 
 	fastify.decorate("kafka", kafka);
 
-	fastify.addHook("onClose", async () => {
-		fastify.log.info("🔌 Closing Kafka connections...");
+	fastify.addHook("onClose", async (instance) => {
+		instance.log.info("🔌 Closing Kafka connections...");
 	});
 });
 

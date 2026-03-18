@@ -5,6 +5,17 @@ const start = async () => {
 	try {
 		const app = await buildApp();
 
+		["SIGTERM", "SIGINT"].forEach((signal) => {
+			process.on(signal, async () => {
+				app.log.info(`Received ${signal}, closing server...`);
+
+				await app.close();
+
+				app.log.info("Server closed gracefully");
+				process.exit(0);
+			});
+		});
+
 		await app.listen({
 			port: env.SERVER_PORT,
 			host: "0.0.0.0",

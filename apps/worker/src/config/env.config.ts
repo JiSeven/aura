@@ -7,6 +7,7 @@ export const env = createEnv({
 		REDIS_URL: z.url().default("redis://localhost:6379"),
 		KAFKA_BROKERS: z.string().min(1),
 		RESEND_API_KEY: z.string(),
+		API_URL: z.string(),
 	},
 	runtimeEnv: process.env,
 	emptyStringAsUndefined: true,

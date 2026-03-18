@@ -14,8 +14,8 @@ export const eventBusPlugin = fp(async (fastify) => {
 
 	fastify.decorate("events", eventBus);
 
-	fastify.addHook("onClose", async () => {
-		fastify.log.info("🔌 Disconnecting EventBus...");
+	fastify.addHook("onClose", async (instance) => {
+		instance.log.info("🔌 Closing EventBus connections...");
 		await eventBus.disconnect();
 	});
 });
