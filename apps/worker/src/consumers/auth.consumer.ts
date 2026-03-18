@@ -1,15 +1,14 @@
+import { AccountRegisteredPayloadSchema, AUTH_TOPICS } from "@aura/contracts";
 import fp from "fastify-plugin";
 
-type Event = {
-	email: string;
-};
-
 export default fp(async (fastify) => {
-	await fastify.events.subscribe<Event>(
+	await fastify.events.subscribe(
 		"aura-worker-group",
-		"account.registered",
-		async (payload) => {
+		AUTH_TOPICS.ACCOUNT_REGISTERED,
+		async (rawPayload) => {
 			try {
+				const payload = AccountRegisteredPayloadSchema.parse(rawPayload);
+
 				const otpCode = fastify.security.generateOTP();
 
 				await fastify.redis.set(`otp:${payload.email}`, otpCode, "EX", 300);
@@ -22,10 +21,7 @@ export default fp(async (fastify) => {
 
 				fastify.log.info({ email: payload.email }, "✅ OTP успешно доставлен");
 			} catch (error) {
-				fastify.log.error(
-					{ error, email: payload.email },
-					"❌ Ошибка обработки события",
-				);
+				fastify.log.error({ error }, "❌ Ошибка обработки события");
 			}
 		},
 	);

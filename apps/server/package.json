@@ -11,6 +11,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@aura/contracts": "workspace:^",
 		"@aura/db": "workspace:^",
 		"@aura/infra": "workspace:^",
 		"@aura/typescript-config": "workspace:^",

@@ -1,3 +1,4 @@
+import { AUTH_TOPICS } from "@aura/contracts";
 import { type AuraDb, accounts, eq } from "@aura/db";
 import type { EventBus, SecurityService } from "@aura/infra";
 
@@ -31,7 +32,7 @@ export class AuthService {
 			throw new Error("Error registering account");
 		}
 
-		await this.events.publish("account.registered", {
+		await this.events.publish(AUTH_TOPICS.ACCOUNT_REGISTERED, {
 			id: account.id,
 			email: account.email,
 		});
